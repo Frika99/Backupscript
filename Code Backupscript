@@ -1,0 +1,26 @@
+#!/bin/bash
+
+folderToBackup="$1"
+backupFolder="$2"
+date=$(date +%Y%m%d%H%M%S)
+backupfile=/home/katharina/backup/*.tar.gz
+
+if [ -d $folderToBackup ]; then
+        echo "Verzeichnis $folderToBackup existiert."
+else
+        echo "Fehler! Das zu sichernde Verzeichnis existiert nicht!"
+        exit 1
+fi
+
+if [ -d $backupFolder ]; then
+        echo "Verzeichnis $backupFolder existiert."
+else
+        mkdir $backupFolder
+        echo "Verzeichnis $backupFolder wurde erstellt."
+fi
+
+tar -czf ${backupFolder}/${date}_Dokumente.tar.gz ${folderToBackup}
+
+if [ -s $backupfile ]; then
+        rsync backup/*.tar.gz katharina@192.168.56.32:
+fi
